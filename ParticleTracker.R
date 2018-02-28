@@ -29,6 +29,7 @@ timestamp.from.images <- function(path = "test/FakeParticles/",
 particle.positions.from.images <- function(path = "test/FakeParticles/",
                                            format = "jpg",
                                            firstlast = TRUE,
+                                           sep.window = TRUE,
                                            output.fig = TRUE){
     message(paste("Reading path ", path, " ..."))
     if (!file.exists(path)) stop("Path does not exist...")
@@ -60,6 +61,7 @@ particle.positions.from.images <- function(path = "test/FakeParticles/",
     message(paste(num.images, "images loaded and compiled.\n Please klick at\n",
                          num.images, "particles (top to bottom)"))
     
+    if (sep.window) x11(bg = "black", height = 10, width = 10)
     par(mar = c(0,2.5,0,0))
     plot(raster(composed),
          legend = FALSE,
@@ -76,13 +78,13 @@ particle.positions.from.images <- function(path = "test/FakeParticles/",
     return(df = cbind(df, locs))
 }
 
-start.the.shit <- function(path = "~/Dropbox/IOW/R-functions/Particle_locator/test"){
+start.the.shit <- function(path = "~/Dropbox/IOW/R-functions/Particle_locator/test", ...){
     dirs <- list.dirs(path = path, full.names = TRUE)
     for (dir in dirs[-1]) { # to exclude the first directory which might always be 'path' itself ??
         message(dir)
         #readline(prompt = "continue [Enter] or skip [Esc]")
         times     <- timestamp.from.images(path = dir)$data
-        locations <- particle.positions.from.images(path = dir)
+        locations <- particle.positions.from.images(path = dir, ...)
         
         df <- merge(times, locations, by = "filename", all.x = TRUE)
         write.csv(x = df, file = paste(dir, "ParticleTrack.csv", sep = "/"))
@@ -90,4 +92,4 @@ start.the.shit <- function(path = "~/Dropbox/IOW/R-functions/Particle_locator/te
     
 }
 
-start.the.shit()
+start.the.shit(sep.window = T)
