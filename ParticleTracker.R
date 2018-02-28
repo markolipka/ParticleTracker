@@ -91,8 +91,8 @@ particle.positions.from.images <- function(path = "test/FakeParticles/",
     text(x = mean(locs$x) * 1.25, 
          y = locs$y, # 
          labels = round(locs, digits = 2)[, 2])
-    
-    #dev.off()
+    if (output.fig) dev.copy(png, paste(path, 'ParticleTrack.png', sep = "/"))
+    dev.off()
     return(df = cbind(df, locs))
 }
 
