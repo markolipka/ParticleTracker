@@ -1,3 +1,7 @@
+
+
+#FIXME: resizing of the plot window before locate()ing points leads to wrong results!
+
 library(raster)
 library(exif)
 
@@ -24,12 +28,20 @@ timestamp.from.images <- function(path = "test/FakeParticles/",
 
 particle.positions.from.images <- function(path = "test/FakeParticles/",
                                            format = "jpg",
+                                           firstlast = TRUE,
                                            output.fig = TRUE){
+    message(paste("Reading path ", path, " ..."))
+    if (!file.exists(path)) stop("Path does not exist...")
     images <- list.files(path, full.names = T,
                          include.dirs = F, all.files = F,
                          pattern = format)
     num.images = length(images)
     if (num.images < 2) stop("Number of images must be at least 2")
+    
+    if (firstlast) {
+        images <- images[c(1, num.images)]
+        num.images <- 2
+    }
     
     mats <- lapply(images, function(img) as.matrix(raster(img)))
     dimensions <- mapply(dim, mats)
@@ -45,10 +57,11 @@ particle.positions.from.images <- function(path = "test/FakeParticles/",
     composed <- Reduce('+', mats) # sum of all matrices
     
     #if (output.fig) png(filename = "ParticleTrack.png")
+    message(paste(num.images, "images loaded and compiled.\n Please klick at\n",
+                         num.images, "particles (top to bottom)"))
     
+    par(mar = c(0,2.5,0,0))
     plot(raster(composed),
-         main = paste(num.images, "images loaded and compiled.\n Please klick at\n",
-                      num.images, "particles (top to bottom)"),
          legend = FALSE,
          #axes = FALSE,
          col = grey(seq(0, 1, length = 8)))
@@ -63,17 +76,18 @@ particle.positions.from.images <- function(path = "test/FakeParticles/",
     return(df = cbind(df, locs))
 }
 
-start.the.shit <- function(path = "~/Dropbox/IOW/R-functions/Particle_locator/test/"){
-    setwd(path)
+start.the.shit <- function(path = "~/Dropbox/IOW/R-functions/Particle_locator/test"){
     dirs <- list.dirs(path = path, full.names = TRUE)
     for (dir in dirs[-1]) { # to exclude the first directory which might always be 'path' itself ??
         message(dir)
         #readline(prompt = "continue [Enter] or skip [Esc]")
-    times     <- timestamp.from.images(path = dir)$data
-    locations <- particle.positions.from.images(path = dir)
-    
-    df <- merge(times, locations, by = "filename")
-    write.csv(x = df, file = paste(dir, "ParticleTrack.csv", sep = "/"))
+        times     <- timestamp.from.images(path = dir)$data
+        locations <- particle.positions.from.images(path = dir)
+        
+        df <- merge(times, locations, by = "filename", all.x = TRUE)
+        write.csv(x = df, file = paste(dir, "ParticleTrack.csv", sep = "/"))
     }
     
 }
+
+start.the.shit()
