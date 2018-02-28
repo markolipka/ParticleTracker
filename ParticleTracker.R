@@ -45,8 +45,10 @@ particle.positions.from.images <- function(path = "test/FakeParticles/",
         num.images <- 2
     }
     
+
     rasters <- lapply(images, function(img) raster(img))
     dimensions <- mapply(dim, rasters)
+
     df <- data.frame("filename" = images,
                      "width" = dimensions[2,],
                      "height" = dimensions[1,])
@@ -93,5 +95,6 @@ start.the.shit <- function(path = "~/Dropbox/IOW/R-functions/Particle_locator/te
     }
     
 }
+
 
 start.the.shit(sep.window = T, firstlast = F)
