@@ -63,7 +63,7 @@ particle.positions.from.images <- function(path = "test/FakeParticles/",
     message(paste(num.images, "images loaded and compiled.\n Please klick at\n",
                          num.images, "particles (top to bottom)"))
     
-    if (sep.window) x11(bg = "grey", height = 10, width = 10)
+    if (sep.window) x11(bg = "pink", height = 10, width = 10)
     par(mar = c(0,2.5,0,0))
     plot(composed,
          legend = TRUE,
