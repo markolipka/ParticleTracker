@@ -80,7 +80,7 @@ particle.positions.from.images <- function(path = "test/FakeParticles/",
     # Particle Tracking:
     if (firstlast) {num.klicks <- 2}else{num.klicks <- num.images}
     message(paste(num.images, "images loaded and compiled.\n Please klick at\n",
-                  num.klicks, "particles (top to bottom)"))
+                  num.klicks, "particles (top to bottom)\n Don't resize the plot window before selecting particles!"))
     
     if (sep.window) x11(bg = "pink", height = 10, width = 10) # Option: separate window
     par(mar = c(0,2.5,0,0)) # get rid of useless margins
