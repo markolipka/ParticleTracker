@@ -1,0 +1,41 @@
+---
+title: "Particle Tracker"
+author: "Marko Lipka"
+date: "2/28/2018"
+output: github_document
+editor_options: 
+  chunk_output_type: console
+---
+
+Read and combine raster images and their exif data to track particle movement in liquids.
+
+*exif* package is used to extract meta data.  
+image files are read and processed with the *raster* package.  
+particle movement can be tracked via selection of the particle positions in a stack of images via the *locator()* function.
+
+# Example
+
+```{r setup, eval = FALSE, include = TRUE}
+source("ParticleTracker.R")
+track.particles(
+    path = "~/Dropbox/IOW/R-functions/Particle_locator/test/lala/lala/lulu/",
+    sep.window = T, firstlast = F,
+    exif.attribute = "origin_timestamp",
+    #exif.attribute = NA,
+    format = "jpg")
+```
+
+![ExampleOutput](ParticleTrack.png)
+
+```{r ExampleTable, echo = F}
+library(pander)
+example.table <- read.csv("ParticleTrack.csv")
+example.table$filename <- sub("/Users/marko/Dropbox/IOW/R-functions/Particle_locator/test/lala/lala/lulu/",
+                              "", example.table$filename)
+pander(example.table[, -1], rownames = F)
+
+example.summary <- read.table("ResultSummary.txt", sep = "")
+pander(example.summary, digits = 2, col.names = "results",
+       justify = c("left", "right"))
+```
+
