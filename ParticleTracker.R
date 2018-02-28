@@ -1,6 +1,7 @@
 
 
 #FIXME: resizing of the plot window before locate()ing points leads to wrong results!
+#FIXME: composition of images via matrix addition leads to pale grey dots
 
 library(raster)
 library(exif)
@@ -44,7 +45,7 @@ particle.positions.from.images <- function(path = "test/FakeParticles/",
         num.images <- 2
     }
     
-    mats <- lapply(images, function(img) as.matrix(raster(img)))
+    mats <- lapply(images, function(img) 255 - as.matrix(raster(img)))
     dimensions <- mapply(dim, mats)
     df <- data.frame("filename" = images,
                      "width" = dimensions[2,],
@@ -66,7 +67,8 @@ particle.positions.from.images <- function(path = "test/FakeParticles/",
     plot(raster(composed),
          legend = FALSE,
          #axes = FALSE,
-         col = grey(seq(0, 1, length = 8)))
+         col = grey(seq(1, 0, length = 8))
+         )
     
     locs <- as.data.frame(locator(n = num.images, type = "o"))
     
@@ -92,4 +94,4 @@ start.the.shit <- function(path = "~/Dropbox/IOW/R-functions/Particle_locator/te
     
 }
 
-start.the.shit(sep.window = T)
+start.the.shit(sep.window = T, firstlast = T)
