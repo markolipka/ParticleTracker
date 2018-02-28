@@ -1,7 +1,6 @@
 
 
 #FIXME: resizing of the plot window before locate()ing points leads to wrong results!
-#FIXME: composition of images via matrix addition leads to pale grey dots
 
 library(raster)
 library(exif)
@@ -58,7 +57,7 @@ particle.positions.from.images <- function(path = "test/FakeParticles/",
         warning("Dimensions of images are not uniform")
     }
     
-    composed <- Reduce('+', rasters) # sum of all rasters
+    composed <- min(stack(rasters))
     
     #if (output.fig) png(filename = "ParticleTrack.png")
     message(paste(num.images, "images loaded and compiled.\n Please klick at\n",
