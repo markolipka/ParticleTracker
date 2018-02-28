@@ -1,4 +1,4 @@
 "x"
-"Travel time [s]" NA
-"Travel distance [px]" 2343.73286467487
-"Sinking velocity [px/s]" NA
+"Travel time [s]" 7
+"Travel distance [px]" 2353.07299270073
+"Sinking velocity [px/s]" 336.153284671533
