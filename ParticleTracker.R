@@ -1,6 +1,7 @@
 
 
 #FIXME: resizing of the plot window before locate()ing points leads to wrong results!
+#FIXME: composition of images via matrix addition leads to pale grey dots
 
 library(raster)
 library(exif)
@@ -44,8 +45,8 @@ particle.positions.from.images <- function(path = "test/FakeParticles/",
         num.images <- 2
     }
     
-    mats <- lapply(images, function(img) as.matrix(raster(img)))
-    dimensions <- mapply(dim, mats)
+    rasters <- lapply(images, function(img) raster(img))
+    dimensions <- mapply(dim, rasters)
     df <- data.frame("filename" = images,
                      "width" = dimensions[2,],
                      "height" = dimensions[1,])
@@ -55,22 +56,23 @@ particle.positions.from.images <- function(path = "test/FakeParticles/",
         warning("Dimensions of images are not uniform")
     }
     
-    composed <- Reduce('+', mats) # sum of all matrices
+    composed <- Reduce('+', rasters) # sum of all rasters
     
     #if (output.fig) png(filename = "ParticleTrack.png")
     message(paste(num.images, "images loaded and compiled.\n Please klick at\n",
                          num.images, "particles (top to bottom)"))
     
-    if (sep.window) x11(bg = "black", height = 10, width = 10)
+    if (sep.window) x11(bg = "grey", height = 10, width = 10)
     par(mar = c(0,2.5,0,0))
-    plot(raster(composed),
-         legend = FALSE,
+    plot(composed,
+         legend = TRUE,
          #axes = FALSE,
-         col = grey(seq(0, 1, length = 8)))
+         col = grey(seq(0, 1, length = 256))
+         )
     
     locs <- as.data.frame(locator(n = num.images, type = "o"))
     
-    text(x = mean(locs$x) + 0.1,
+    text(x = mean(locs$x) * 1.25,
          y = locs$y,
          labels = round(locs, digits = 2)[, 2])
     
@@ -92,4 +94,4 @@ start.the.shit <- function(path = "~/Dropbox/IOW/R-functions/Particle_locator/te
     
 }
 
-start.the.shit(sep.window = T)
+start.the.shit(sep.window = T, firstlast = F)
