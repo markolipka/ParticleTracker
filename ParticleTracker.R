@@ -107,7 +107,7 @@ particle.positions.from.images <- function(path = "test/FakeParticles/",
 }
 
 # combine both functions to return data frame (and later plot ??) for each directory in a given path
-start.the.shit <- function(path = "~/Dropbox/IOW/R-functions/Particle_locator/test", format = "jpg",
+track.particles <- function(path = "~/Dropbox/IOW/R-functions/Particle_locator/test", format = "jpg",
                            exif.attribute, ...){
     dirs <- list.dirs(path = path, full.names = TRUE)
     for (dir in dirs[-1]) { # to exclude the first directory which might always be 'path' itself ??
@@ -130,9 +130,3 @@ start.the.shit <- function(path = "~/Dropbox/IOW/R-functions/Particle_locator/te
     }
     
 }
-
-
-start.the.shit(sep.window = F, firstlast = T,
-               exif.attribute = "origin_timestamp",
-               #exif.attribute = NA,
-               format = "jpg")
