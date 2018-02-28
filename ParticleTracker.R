@@ -132,7 +132,7 @@ start.the.shit <- function(path = "~/Dropbox/IOW/R-functions/Particle_locator/te
 }
 
 
-start.the.shit(sep.window = T, firstlast = F,
+start.the.shit(sep.window = F, firstlast = T,
                exif.attribute = "origin_timestamp",
                #exif.attribute = NA,
-               format = "bmp")
+               format = "jpg")
